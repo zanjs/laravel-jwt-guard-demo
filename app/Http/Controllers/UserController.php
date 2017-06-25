@@ -3,22 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\WeUser;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Auth;
 
 class UserController extends Controller
 {
-    protected $guard = 'api';
+    protected $guard = 'jwt';
 
     public function regist(Request $request)
     {   
 
-        $hasUser = User::Where('email', $request->email)->first();
+        $hasUser = WeUser::Where('email', $request->email)->first();
 
         if(!$hasUser){
 
-            User::create([
+            WeUser::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
@@ -96,8 +96,15 @@ class UserController extends Controller
      * @return User|null
      */
     public function me()
-    {
-        return Auth::guard('api')->user();
+    {   
+        try {
+            if (! Auth::guard('jwt')->user()) {
+                return response()->json(['error' => 'invalid_credentials'], 401);
+            }
+        } catch (JWTException $e) {
+            return response()->json(['error' => 'could_not_create_token'], 500);
+        }
+        return Auth::guard('jwt')->user();
     }
     /**
      * 退出

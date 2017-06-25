@@ -13,9 +13,9 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
 Route::post('/login', [
     'uses' => 'UserController@token',
@@ -25,7 +25,7 @@ Route::post('/register', 'UserController@regist');
 
 // Route::get('/me', 'UserController@me');
 
- Route::group(['middleware' => 'auth:api'], function () {
+ Route::group(['middleware' => 'jwt.auth'], function () {
      Route::get('/me', 'UserController@me');
  });
 
