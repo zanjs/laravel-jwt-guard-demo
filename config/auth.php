@@ -70,6 +70,11 @@ return [
             'model' => App\User::class,
         ],
 
+        'weusers' => [
+            'driver' => 'eloquent',
+            'model' => App\WeUser::class,
+        ],
+
         // 'users' => [
         //     'driver' => 'database',
         //     'table' => 'users',

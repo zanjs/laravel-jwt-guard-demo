@@ -17,10 +17,16 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/signin', [
+Route::post('/login', [
     'uses' => 'UserController@token',
 ]);
 
 Route::post('/register', 'UserController@regist');
+
+// Route::get('/me', 'UserController@me');
+
+ Route::group(['middleware' => 'auth:api'], function () {
+     Route::get('/me', 'UserController@me');
+ });
 
 // Route::post('token', 'UserController@token');
